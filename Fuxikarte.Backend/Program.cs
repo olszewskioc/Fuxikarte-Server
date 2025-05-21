@@ -13,7 +13,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<UserService>();
-// builder.Services.AddScoped<AuthService>();   
+builder.Services.AddScoped<AuthService>();   
 // builder.Services.AddScoped<TokenService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>

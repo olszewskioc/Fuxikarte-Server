@@ -18,9 +18,7 @@ namespace Fuxikarte.Backend.Services
         }
 
         public async Task CreateUser(User user, string password)
-        {
-            Console.WriteLine($"Estou aqui agora {password}");
-            
+        {            
             user.Password = _passwordHasher.HashPassword(user, password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
