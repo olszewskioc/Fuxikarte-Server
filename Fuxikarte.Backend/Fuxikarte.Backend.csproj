@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.10.0" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.2.7" />
+    <PackageReference Include="Scalar.AspNetCore" Version="1.2.*" />
     <PackageReference Include="Microsoft.ASpNetCore" Version="2.3.0" />
     <PackageReference Include="Microsoft.ASpNetCore.Mvc" Version="2.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />

@@ -3,6 +3,7 @@ using Fuxikarte.Backend.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Fuxikarte.Backend.DTOs;
+using AutoMapper;
 
 namespace Fuxikarte.Backend.Services
 {
@@ -10,15 +11,17 @@ namespace Fuxikarte.Backend.Services
     {
         private readonly AppDbContext _context;
         private readonly PasswordHasher<User> _passwordHasher;
+        private readonly IMapper _mapper;
 
-        public UserService(AppDbContext context)
+        public UserService(AppDbContext context, IMapper mapper)
         {
             _context = context;
             _passwordHasher = new PasswordHasher<User>();
+            _mapper = mapper;
         }
 
         public async Task CreateUser(User user, string password)
-        {            
+        {
             user.Password = _passwordHasher.HashPassword(user, password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -34,7 +37,10 @@ namespace Fuxikarte.Backend.Services
             if (user == null) return false;
 
             user.Username = model.Username ?? user.Username;
-            user.Password = model.Password ?? user.Password;
+            if (!string.IsNullOrWhiteSpace(model.Password))
+            {
+                user.Password = _passwordHasher.HashPassword(user, model.Password);
+            }
             await _context.SaveChangesAsync();
             return true;
         }

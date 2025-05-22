@@ -48,6 +48,8 @@ namespace Fuxikarte.Backend.Services
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddHours(2),
+                Issuer = _config["Jwt:Issuer"],
+                Audience = _config["Jwt:Audience"],
                 SigningCredentials = creds
             };
 
