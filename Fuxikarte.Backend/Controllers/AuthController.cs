@@ -38,12 +38,7 @@ namespace Fuxikarte.Backend.Controllers
         {
             try
             {
-                var user = new User
-                {
-                    Username = model.Username,
-                };
-
-                await _userService.CreateUser(user, model.Password);
+                await _userService.CreateUser(model);
                 return Ok(new { message = "Usuário registrado com sucesso!" });
             }
             catch (NpgsqlException ex)

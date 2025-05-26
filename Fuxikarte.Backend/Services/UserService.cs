@@ -20,16 +20,25 @@ namespace Fuxikarte.Backend.Services
             _mapper = mapper;
         }
 
-        public async Task CreateUser(User user, string password)
+        public async Task CreateUser(UserRegistrationDTO model)
         {
-            user.Password = _passwordHasher.HashPassword(user, password);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username) ?? throw new Exception("Usuário já existe!");
+            user.Password = _passwordHasher.HashPassword(user, model.Password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<User>> GetAllUsers() => await _context.Users.ToListAsync();
+        public async Task<IEnumerable<UserDTO>> GetAllUsers()
+        {
+            var users = await _context.Users.ToListAsync();
+            return _mapper.Map<IEnumerable<UserDTO>>(users);
+        }
 
-        public async Task<User?> GetUserById(int id) => await _context.Users.FindAsync(id);
+        public async Task<UserDTO> GetUserById(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+            return _mapper.Map<UserDTO>(user);
+        }
 
         public async Task<bool> UpdateUser(int id, UserUpdateDTO model)
         {
