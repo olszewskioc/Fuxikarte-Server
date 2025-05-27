@@ -18,27 +18,27 @@ namespace Fuxikarte.Backend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CategoryController : ControllerBase
+    public class CustomerController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly ILogger<CategoryController> _logger;
-        private readonly CategoryService _categoryService;
+        private readonly ILogger<CustomerController> _logger;
+        private readonly CustomerService _customerService;
 
-        public CategoryController(AppDbContext context, ILogger<CategoryController> logger, CategoryService service)
+        public CustomerController(AppDbContext context, ILogger<CustomerController> logger, CustomerService service)
         {
             _context = context;
             _logger = logger;
-            _categoryService = service;
+            _customerService = service;
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<CategoryDTO>> CreateCategory([FromBody] NewCategoryDTO model)
+        public async Task<ActionResult<CustomerDTO>> CreateCustomer([FromBody] NewCustomerDTO model)
         {
             try
             {
-                await _categoryService.CreateCategory(model);
-                return Ok(new { message = "Categoria criada com sucesso" });
+                await _customerService.CreateCustomer(model);
+                return Ok(new { message = "Cliente criado com sucesso" });
             }
             catch (NpgsqlException ex)
             {
@@ -55,13 +55,13 @@ namespace Fuxikarte.Backend.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoryNavDTO>>> GetAllCategoriesNav()
+        public async Task<ActionResult<IEnumerable<CustomerNavDTO>>> GetAllCustomersNav()
         {
             try
             {
-                var categories = await _categoryService.GetAllCategoriesNav();
-                if (categories == null || !categories.Any()) return NotFound(new { message = "Nenhuma categoria encontrada!" });
-                return Ok(new { categories });
+                var customers = await _customerService.GetAllCustomersNav();
+                if (customers == null || !customers.Any()) return NotFound(new { message = "Nenhum cliente encontrado!" });
+                return Ok(new { customers });
             }
             catch (NpgsqlException ex)
             {
@@ -78,13 +78,13 @@ namespace Fuxikarte.Backend.Controllers
 
         [Authorize]
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<CategoryDTO>> GetCategoryByIdNav(int id)
+        public async Task<ActionResult<CustomerDTO>> GetCustomerByIdNav(int id)
         {
             try
             {
-                var category = await _categoryService.GetCategoryByIdNav(id);
-                if (category == null) return NotFound(new { message = $"Categoria de ID {id} não encontrada!" });
-                return Ok(new { category });
+                var customer = await _customerService.GetCustomerByIdNav(id);
+                if (customer == null) return NotFound(new { message = $"Cliente de ID {id} não encontrado!" });
+                return Ok(new { customer });
             }
             catch (NpgsqlException ex)
             {
@@ -101,13 +101,13 @@ namespace Fuxikarte.Backend.Controllers
 
         [Authorize]
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateCategory(UpdateCategoryDTO model, int id)
+        public async Task<IActionResult> UpdateCustomer(UpdateCustomerDTO model, int id)
         {
             try
             {
-                var isUpdated = await _categoryService.UpdateCategory(model, id);
-                if (!isUpdated) return NotFound(new { message = $"Categoria de ID {id} não encontrada!" });
-                return Ok(new { message = $"Categoria de ID {id} atualizada com sucesso!" });
+                var isUpdated = await _customerService.UpdateCustomer(model, id);
+                if (!isUpdated) return NotFound(new { message = $"Cliente de ID {id} não encontrado!" });
+                return Ok(new { message = $"Cliente de ID {id} atualizado com sucesso!" });
             }
             catch (NpgsqlException ex)
             {
@@ -124,13 +124,13 @@ namespace Fuxikarte.Backend.Controllers
         
         [Authorize]
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<IActionResult> DeleteCustomer(int id)
         {
             try
             {
-                var isDeleted = await _categoryService.DeleteCategory(id);
-                if (!isDeleted) return NotFound(new { message = $"Categoria de ID {id} não encontrada!" });
-                return Ok(new { message = $"Categoria de ID {id} removida com sucesso!" });
+                var isDeleted = await _customerService.DeleteCustomer(id);
+                if (!isDeleted) return NotFound(new { message = $"Cliente de ID {id} não encontrado!" });
+                return Ok(new { message = $"Cliente de ID {id} removido com sucesso!" });
             }
             catch (NpgsqlException ex)
             {

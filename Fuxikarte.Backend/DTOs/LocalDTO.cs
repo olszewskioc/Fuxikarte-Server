@@ -9,7 +9,7 @@ namespace Fuxikarte.Backend.DTOs
         public required string LocalName { get; set; }
         public string Description { get; set; } = string.Empty;
     }
-    public class LocalDTO
+    public class LocalNavDTO
     {
         public required int LocalId { get; set; }
         public required string LocalName { get; set; }
@@ -18,7 +18,7 @@ namespace Fuxikarte.Backend.DTOs
         public DateTime UpdatedAt { get; set; }
         public ICollection<SaleDTO> Sales { get; set; } = new List<SaleDTO>();
     }
-    public class LocalSaleDTO
+    public class LocalDTO
     {
         public required int LocalId { get; set; }
         public required string LocalName { get; set; }

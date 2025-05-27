@@ -11,7 +11,7 @@ namespace Fuxikarte.Backend.DTOs
         [StringLength(13)]
         public required string Phone { get; set; }
     }
-    public class CustomerDTO
+    public class CustomerNavDTO
     {
         public required int CustomerId { get; set; }
         public required string CustomerName { get; set; }
@@ -20,7 +20,7 @@ namespace Fuxikarte.Backend.DTOs
         public DateTime UpdatedAt { get; set; }
         public ICollection<SaleDTO> Sales { get; set; } = new List<SaleDTO>();
     }
-    public class CustomerSaleDTO
+    public class CustomerDTO
     {
         public required int CustomerId { get; set; }
         public required string CustomerName { get; set; }

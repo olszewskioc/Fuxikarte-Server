@@ -11,16 +11,18 @@ namespace Fuxikarte.Backend.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly CategoryService _categoryService;
 
-        public ProductService(AppDbContext context, IMapper mapper)
+        public ProductService(AppDbContext context, IMapper mapper, CategoryService categoryService)
         {
             _context = context;
             _mapper = mapper;
+            _categoryService = categoryService;
         }
 
         public async Task CreateProduct(NewProductDTO model)
         {
-            var _ = await _context.Categories.FindAsync(model.CategoryId) ?? throw new Exception("Categoria não existe!");
+            var _ = await _categoryService.GetCategoryById(model.CategoryId) ?? throw new Exception("Categoria não existe!");
             Product product = _mapper.Map<Product>(model);
             _context.Products.Add(product);
             await _context.SaveChangesAsync();

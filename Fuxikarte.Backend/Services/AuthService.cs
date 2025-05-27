@@ -35,8 +35,9 @@ namespace Fuxikarte.Backend.Services
 
         public string GenerateToken(User user)
         {
+
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_config["Jwt:Key"] ?? throw new Exception("Chave JWT não encontrada")));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var claims = new ClaimsIdentity(new[]
                 {
