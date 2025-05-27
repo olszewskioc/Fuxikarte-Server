@@ -9,6 +9,9 @@ namespace Fuxikarte.Backend.DTOs
         [StringLength(150, MinimumLength = 3)]
         public required string ProductName { get; set; }
 
+        [Required]
+        public required int CategoryId { get; set; }
+
         public string? Description { get; set; }
 
         [Required]

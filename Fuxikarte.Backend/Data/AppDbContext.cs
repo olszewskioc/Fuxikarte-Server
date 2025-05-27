@@ -88,6 +88,12 @@ namespace Fuxikarte.Backend.Data
             #region PRODUCT
 
             modelBuilder.Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Product>()
                 .Property(p => p.Description)
                 .HasColumnType("text");
 
@@ -114,13 +120,25 @@ namespace Fuxikarte.Backend.Data
             #region SALE
 
             modelBuilder.Entity<Sale>()
+                .HasOne(s => s.Local)
+                .WithMany(l => l.Sales)
+                .HasForeignKey(s => s.LocalId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Sale>()
+                .HasOne(s => s.Customer)
+                .WithMany(c => c.Sales)
+                .HasForeignKey(s => s.CustomerId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Sale>()
                 .Property(s => s.Payment)
                 .HasConversion<string>();
 
             modelBuilder.Entity<Sale>()
                 .Property(s => s.Subtotal)
                 .HasColumnType("money");
-            
+
             modelBuilder.Entity<Sale>()
                 .Property(s => s.CreatedAt)
                 .HasColumnType("timestamp with time zone")
@@ -134,7 +152,19 @@ namespace Fuxikarte.Backend.Data
             #endregion
 
             #region SALE_PRODUCT
-            
+
+            modelBuilder.Entity<SaleProduct>()
+                .HasOne(sp => sp.Sale)
+                .WithMany(s => s.SaleProducts)
+                .HasForeignKey(sp => sp.SaleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SaleProduct>()
+                .HasOne(sp => sp.Product)
+                .WithMany(p => p.SaleProducts)
+                .HasForeignKey(sp => sp.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<SaleProduct>()
                 .Property(sp => sp.CreatedAt)
                 .HasColumnType("timestamp with time zone")

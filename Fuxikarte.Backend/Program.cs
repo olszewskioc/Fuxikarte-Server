@@ -10,6 +10,8 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Fuxikarte.Backend;
 
+#region BUILDER
+    
 var builder = WebApplication.CreateBuilder(args);
 
 // builder.Services.AddControllersWithViews();
@@ -20,6 +22,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthService>();
+
+builder.Services.AddScoped<CategoryService>();
 builder.Services.AddScoped<ProductService>();
 // builder.Services.AddScoped<TokenService>();
 
@@ -48,6 +52,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+#endregion
+
+#region APP
+    
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -61,7 +69,7 @@ app.MapGet("/", () =>
 {
     Console.WriteLine("GET / foi chamado");
     return Results.Redirect("/scalar/v1");
-}); // Redireciona a raiz para o Scalar
+}).ExcludeFromDescription(); // Redireciona a raiz para o Scalar
 
 app.MapControllers();
 
@@ -93,3 +101,5 @@ app.Use(async (context, next) =>
 });
 
 app.Run();
+
+#endregion

@@ -20,6 +20,7 @@ namespace Fuxikarte.Backend.Services
 
         public async Task CreateProduct(NewProductDTO model)
         {
+            var _ = await _context.Categories.FindAsync(model.CategoryId) ?? throw new Exception("Categoria não existe!");
             Product product = _mapper.Map<Product>(model);
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
@@ -36,12 +37,18 @@ namespace Fuxikarte.Backend.Services
         }
         public async Task<IEnumerable<ProductNavDTO>> GetAllProductsNav()
         {
-            var products = await _context.Products.ToListAsync();
+            var products = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.SaleProducts)
+                .ToListAsync();
             return _mapper.Map<IEnumerable<ProductNavDTO>>(products);
         }
         public async Task<ProductNavDTO> GetProductByIdNav(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.SaleProducts)
+                .FirstOrDefaultAsync(p => p.ProductId == id);
             return _mapper.Map<ProductNavDTO>(product);
         }
         public async Task<bool> UpdateProduct(UpdateProductDTO model, int id)

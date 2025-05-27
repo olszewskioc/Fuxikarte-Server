@@ -17,12 +17,10 @@ namespace Fuxikarte.Backend.Models
         public int SaleId { get; set; }
 
         [Column("local_id")]
-        [Required]
-        public int LocalId { get; set; }
+        public int? LocalId { get; set; }
 
         [Column("customer_id")]
-        [Required]
-        public int CustomerId { get; set; }
+        public int? CustomerId { get; set; }
 
         [Column("payment")]
         [Required]

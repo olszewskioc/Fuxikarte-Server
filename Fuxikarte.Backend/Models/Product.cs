@@ -9,7 +9,7 @@ namespace Fuxikarte.Backend.Models
         [Column("product_id")]
         [Key]
         [Required]
-        public int Id { get; set; }
+        public int ProductId { get; set; }
 
         [Column("product_name")]
         [Required]
