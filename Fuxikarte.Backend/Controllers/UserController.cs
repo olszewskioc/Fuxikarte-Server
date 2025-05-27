@@ -33,6 +33,9 @@ namespace Fuxikarte.Backend.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Get all users (Need auth)
+        /// </summary>
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> GetAllUsers()

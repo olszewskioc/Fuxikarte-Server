@@ -48,9 +48,11 @@ namespace Fuxikarte.Backend.Services
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null) return false;
-
+            var _ = await _context.Categories.FindAsync(model.CategoryId) ?? throw new Exception("Categoria inexistente");
+            
             product.ProductName = model.ProductName ?? product.ProductName;
             product.Description = model.Description ?? product.Description;
+            product.CategoryId = model.CategoryId ?? product.CategoryId;
             product.Stock = model.Stock ?? product.Stock;
             product.Cost = model.Cost ?? product.Cost;
             product.Price = model.Price ?? product.Price;
@@ -63,7 +65,7 @@ namespace Fuxikarte.Backend.Services
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null) return false;
-            
+
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return true;

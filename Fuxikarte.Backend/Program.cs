@@ -7,17 +7,20 @@ using Fuxikarte.Backend.Services;
 using Fuxikarte.Backend.Mappings;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
+using Fuxikarte.Backend;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi("v1", options => { options.AddDocumentTransformer<BearerSecuritySchemeTransformer>(); });
 
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ProductService>();
 // builder.Services.AddScoped<TokenService>();
 
 builder.Services.AddAutoMapper(typeof(Program));
@@ -31,6 +34,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"] ?? "default-key");
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -67,8 +72,15 @@ if (app.Environment.IsDevelopment())
     {
         options
             .WithTitle("Minha API - Fuxikarte")
-            .WithTheme(ScalarTheme.Purple)
+            .WithTheme(ScalarTheme.BluePlanet)
             .WithDownloadButton(true);
+        options.ShowSidebar = true;
+        options
+            .WithPreferredScheme("Bearer")
+            .WithHttpBearerAuthentication(bearer =>
+            {
+                bearer.Token = "your-bearer-token";
+            });
     });
 }
 

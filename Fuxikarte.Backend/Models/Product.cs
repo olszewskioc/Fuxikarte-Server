@@ -15,6 +15,9 @@ namespace Fuxikarte.Backend.Models
         [Required]
         [StringLength(150)]
         public string ProductName { get; set; } = string.Empty;
+
+        [Column("category_id")]
+        public int? CategoryId { get; set; }
         
         [Column("description")]
         [Required]
@@ -41,6 +44,8 @@ namespace Fuxikarte.Backend.Models
         public DateTime UpdatedAt { get; set; }
 
         // Navigation
-        public List<SaleProduct> SaleProducts { get; set; } = new List<SaleProduct>();
+        [ForeignKey(nameof(CategoryId))]
+        public Category? Category{ get; set; }
+        public ICollection<SaleProduct> SaleProducts { get; set; } = new List<SaleProduct>();
     }
 }
