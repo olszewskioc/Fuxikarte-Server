@@ -22,7 +22,7 @@ namespace Fuxikarte.Backend.Services
 
         public async Task CreateProduct(NewProductDTO model)
         {
-            var _ = await _categoryService.GetCategoryById(model.CategoryId) ?? throw new Exception("Categoria não existe!");
+            _ = await _categoryService.GetCategoryById(model.CategoryId) ?? throw new Exception("Categoria não existe!");
             Product product = _mapper.Map<Product>(model);
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
@@ -57,7 +57,10 @@ namespace Fuxikarte.Backend.Services
         {
             var product = await _context.Products.FindAsync(id);
             if (product == null) return false;
-            var _ = await _context.Categories.FindAsync(model.CategoryId) ?? throw new Exception("Categoria inexistente");
+            if (model.CategoryId != null)
+            {
+                _ = await _categoryService.GetCategoryById((int)model.CategoryId) ?? throw new Exception($"Categoria {model.CategoryId} não existe!");
+            }
             
             product.ProductName = model.ProductName ?? product.ProductName;
             product.Description = model.Description ?? product.Description;

@@ -17,6 +17,8 @@ namespace Fuxikarte.Backend.DTOs
     {
         public required string CategoryName { get; set; }
         public IEnumerable<ProductDTO> Products { get; set; } = new List<ProductDTO>();
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
     public class UpdateCategoryDTO
     {

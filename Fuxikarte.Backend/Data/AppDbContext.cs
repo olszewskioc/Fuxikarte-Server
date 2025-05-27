@@ -133,7 +133,10 @@ namespace Fuxikarte.Backend.Data
 
             modelBuilder.Entity<Sale>()
                 .Property(s => s.Payment)
-                .HasConversion<string>();
+                .HasConversion(
+                    s => s.ToString(),
+                    s => (Payment)Enum.Parse(typeof(Payment), s, true)
+                );
 
             modelBuilder.Entity<Sale>()
                 .Property(s => s.Subtotal)

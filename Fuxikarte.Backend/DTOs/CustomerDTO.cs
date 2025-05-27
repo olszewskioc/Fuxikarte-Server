@@ -25,8 +25,6 @@ namespace Fuxikarte.Backend.DTOs
         public required int CustomerId { get; set; }
         public required string CustomerName { get; set; }
         public required string Phone { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
     }
     public class UpdateCustomerDTO
     {

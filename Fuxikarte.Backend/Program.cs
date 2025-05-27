@@ -10,16 +10,21 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using Fuxikarte.Backend;
 using Fuxikarte.Backend.Extensions;
+using System.Text.Json.Serialization;
 
 #region BUILDER
-    
+
 var builder = WebApplication.CreateBuilder(args);
 
 // builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi("v1", options => { options.AddDocumentTransformer<BearerSecuritySchemeTransformer>(); });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 // builder.Services.AddScoped<UserService>();
 // builder.Services.AddScoped<AuthService>();

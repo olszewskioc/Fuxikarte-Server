@@ -1,11 +1,19 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace Fuxikarte.Backend.Models
 {
     public enum Payment
     {
-        Dinheiro, Pix, Débito, Crédito
+        [EnumMember(Value = "dinheiro")]
+        Dinheiro,
+        [EnumMember(Value = "pix")]
+        Pix,
+        [EnumMember(Value = "debito")]
+        Débito,
+        [EnumMember(Value = "credito")]
+        Crédito
     }
 
     [Table("sales")]
@@ -32,7 +40,7 @@ namespace Fuxikarte.Backend.Models
         [Column("created_at")]
         [Required]
         public DateTime CreatedAt { get; set; }
-        
+
         [Column("updated_at")]
         [Required]
         public DateTime UpdatedAt { get; set; }

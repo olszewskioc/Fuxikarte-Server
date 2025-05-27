@@ -44,8 +44,6 @@ namespace Fuxikarte.Backend.DTOs
         public required int Stock { get; set; }
         public required decimal Cost { get; set; }
         public required decimal Price { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
     }
     public class UpdateProductDTO
     {
