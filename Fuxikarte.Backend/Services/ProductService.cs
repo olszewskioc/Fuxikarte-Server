@@ -50,6 +50,7 @@ namespace Fuxikarte.Backend.Services
             var product = await _context.Products
                 .Include(p => p.Category)
                 .Include(p => p.SaleProducts)
+                    .ThenInclude(sp => sp.Sale)
                 .FirstOrDefaultAsync(p => p.ProductId == id);
             return _mapper.Map<ProductNavDTO>(product);
         }

@@ -13,7 +13,6 @@ namespace Fuxikarte.Backend.DTOs
 
         public required Payment Payment { get; set; }
 
-        public required decimal Subtotal { get; set; }
     }
 
     public class SaleDTO
@@ -21,6 +20,7 @@ namespace Fuxikarte.Backend.DTOs
         public required int SaleId { get; set; }
         public required int LocalId { get; set; }
         public required int CustomerId { get; set; }
+        public required decimal Subtotal { get; set; }
         public required Payment Payment { get; set; }
     }
 
@@ -30,7 +30,8 @@ namespace Fuxikarte.Backend.DTOs
         public required LocalDTO Local { get; set; }
         public required CustomerDTO Customer { get; set; }
         public required Payment Payment { get; set; }
-        public ICollection<ProductsInSaleDTO> ProductsSale { get; set; } = new List<ProductsInSaleDTO>(); 
+        public required decimal Subtotal { get; set; }
+        public ICollection<ProductsInSaleDTO> SaleProducts { get; set; } = new List<ProductsInSaleDTO>(); 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }

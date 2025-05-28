@@ -47,6 +47,7 @@ namespace Fuxikarte.Backend.Services
                 .Include(s => s.Customer)
                 .Include(s => s.Local)
                 .Include(s => s.SaleProducts)
+                    .ThenInclude(sp => sp.Product)
                 .ToListAsync();
             return _mapper.Map<IEnumerable<SaleNavDTO>>(sales);
         }
@@ -56,6 +57,7 @@ namespace Fuxikarte.Backend.Services
                 .Include(s => s.Customer)
                 .Include(s => s.Local)
                 .Include(s => s.SaleProducts)
+                    .ThenInclude(sp => sp.Product)
                 .FirstOrDefaultAsync(s => s.SaleId == id);
             return _mapper.Map<SaleNavDTO>(sales);
         }
