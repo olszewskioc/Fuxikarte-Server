@@ -22,10 +22,15 @@ namespace Fuxikarte.Backend.Services
 
         public async Task CreateUser(UserRegistrationDTO model)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username) ?? throw new Exception("Usuário já existe!");
-            user.Password = _passwordHasher.HashPassword(user, model.Password);
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == model.Username);
+            if (user != null) throw new Exception("Usuário já existe!");
+            else
+            {
+                user = _mapper.Map<User>(model);
+                user.Password = _passwordHasher.HashPassword(user, model.Password);
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
+            }
         }
 
         public async Task<IEnumerable<UserDTO>> GetAllUsers()

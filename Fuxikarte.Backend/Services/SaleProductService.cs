@@ -34,9 +34,9 @@ namespace Fuxikarte.Backend.Services
             {
                 UpdateSaleProductDTO updateSaleProduct = new()
                 {
-                    Quantity = existingSaleProduct.Quantity + model.Quantity,
+                    Quantity = model.Quantity,
                 };
-                await UpdateSaleProduct(updateSaleProduct, existingSaleProduct.SaleProductId);
+                await UpdateSaleProduct(updateSaleProduct, existingSaleProduct.SaleProductId, true);
                 return;
             }
 
@@ -50,7 +50,7 @@ namespace Fuxikarte.Backend.Services
                 Stock = product.Stock - model.Quantity
             };
 
-            Console.WriteLine($"{updateProductDTO.Stock} = {product.Stock} - {model.Quantity}");
+            // Console.WriteLine($"{updateProductDTO.Stock} = {product.Stock} - {model.Quantity}");
 
 
             var succes = await _saleService.UpdateSale(updateSaleDTO, sale.SaleId) && await _productService.UpdateProduct(updateProductDTO, product.ProductId);
@@ -95,7 +95,7 @@ namespace Fuxikarte.Backend.Services
                 .ToListAsync();
             return _mapper.Map<IEnumerable<SalesForProductDTO>>(sales);
         }
-        public async Task<bool> UpdateSaleProduct(UpdateSaleProductDTO model, int id)
+        public async Task<bool> UpdateSaleProduct(UpdateSaleProductDTO model, int id, bool isFromCreate = false)
         {
             var saleProduct = await _context.SaleProducts.FindAsync(id);
             if (saleProduct == null) return false;
@@ -108,19 +108,20 @@ namespace Fuxikarte.Backend.Services
                 _ = await _productService.GetProductById((int)model.ProductId) ?? throw new Exception($"Produto {model.ProductId} não existe!");
             }
 
-            var sale = await _saleService.GetSaleById(saleProduct.SaleId) ?? throw new Exception($"Venda {saleProduct.SaleId} não existe");
-            var product = await _productService.GetProductById(saleProduct.ProductId) ?? throw new Exception($"Produto {saleProduct.ProductId} não existe");
+            var sale = await _saleService.GetSaleById(saleProduct.SaleId);
+            var product = await _productService.GetProductById(saleProduct.ProductId);
 
             UpdateSaleDTO updateSaleDTO = new()
             {
-                Subtotal = sale.Subtotal + (product.Price * (model.Quantity > saleProduct.Quantity ?
-                    model.Quantity - saleProduct.Quantity :
-                    saleProduct.Quantity - model.Quantity))
+                Subtotal = sale.Subtotal + (product.Price * (isFromCreate ? model.Quantity : model.Quantity - saleProduct.Quantity))
             };
+
+            Console.WriteLine($"AQUI: {product.Stock} = {model.Quantity} - {saleProduct.Quantity}");
+            
 
             UpdateProductDTO updateProductDTO = new()
             {
-                Stock = product.Stock + saleProduct.Quantity
+                Stock = isFromCreate ? product.Stock - model.Quantity : product.Stock + (model.Quantity - saleProduct.Quantity)
             };
 
             var succes = await _saleService.UpdateSale(updateSaleDTO, sale.SaleId) && await _productService.UpdateProduct(updateProductDTO, product.ProductId);
@@ -129,7 +130,15 @@ namespace Fuxikarte.Backend.Services
 
             saleProduct.SaleId = model.SaleId ?? saleProduct.SaleId;
             saleProduct.ProductId = model.ProductId ?? saleProduct.ProductId;
-            saleProduct.Quantity = model.Quantity ?? saleProduct.Quantity;
+
+            if (isFromCreate && model.Quantity != null)
+            {
+                saleProduct.Quantity += (int)model.Quantity;
+            }
+            else
+            {
+                saleProduct.Quantity = model.Quantity ?? saleProduct.Quantity;
+            }
 
             await _context.SaveChangesAsync();
             return true;
