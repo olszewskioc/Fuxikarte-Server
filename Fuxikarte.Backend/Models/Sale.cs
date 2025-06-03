@@ -37,6 +37,9 @@ namespace Fuxikarte.Backend.Models
         [Column("subtotal")]
         public decimal Subtotal { get; set; }
 
+        [Column("paid")]
+        public bool Paid { get; set; } 
+
         [Column("created_at")]
         [Required]
         public DateTime CreatedAt { get; set; }
