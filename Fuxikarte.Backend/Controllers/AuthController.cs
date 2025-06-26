@@ -32,6 +32,13 @@ namespace Fuxikarte.Backend.Controllers
             _authService = authService;
         }
 
+        [HttpGet("validate-token")]
+        [Authorize]
+        public IActionResult ValidateToken()
+        {
+            return Ok(new { valid = true });
+        }
+
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserRegistrationDTO model)
