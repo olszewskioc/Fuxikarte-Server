@@ -27,6 +27,8 @@ Abaixo está a estrutura do banco de dados utilizado no projeto:
 
 * Scalar (Documentação de API)
 
+* XUnit (Testes Unitários)
+
 ## Como Executar
 
 Em breve...
