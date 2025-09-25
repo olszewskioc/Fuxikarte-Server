@@ -4,7 +4,7 @@ on:
 
 jobs:
   prove-it:
-    runs-on: [self-hosted, windows]
+    runs-on: [self-hosted, linux]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
