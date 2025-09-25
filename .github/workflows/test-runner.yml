@@ -1,17 +1,24 @@
 name: Test self-hosted runner
 on:
-  workflow_dispatch: {}  # você pode acionar manualmente na aba Actions → Run workflow
+  workflow_dispatch: {}
 
 jobs:
   prove-it:
-    runs-on: [self-hosted, linux]
+    runs-on: [self-hosted, windows]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Runner is alive
+        shell: pwsh
         run: |
-          echo "Hello from self-hosted runner!"
-          date
+          Write-Output "Hello from self-hosted runner!"
+          Get-Date
           whoami
-          docker --version || echo "docker not installed"
+
+          # Verifica se o Docker está instalado
+          try {
+              docker --version
+          } catch {
+              Write-Output "Docker not installed"
+          }
