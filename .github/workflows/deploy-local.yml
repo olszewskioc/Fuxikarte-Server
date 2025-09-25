@@ -1,0 +1,25 @@
+name: CI - local self-hosted build & compose
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-up:
+    runs-on: [self-hosted, linux]   # ou [self-hosted, windows] se seu runner for Windows
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show runner info
+        run: |
+          whoami
+          uname -a || ver
+          docker --version
+
+      - name: Build images and start containers
+        run: |
+          # usa o plugin docker compose (nova forma)
+          docker compose -f docker-compose.dev.yml up -d --build --remove-orphans
+
+      - name: Show containers
+        run: docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
