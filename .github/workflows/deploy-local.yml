@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-and-up:
-    runs-on: [self-hosted, linux]   # ou [self-hosted, windows] se seu runner for Windows
+    runs-on: [self-hosted, windows]   # ou [self-hosted, windows] se seu runner for Windows
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
