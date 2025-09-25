@@ -5,21 +5,33 @@ on:
 
 jobs:
   build-and-up:
-    runs-on: [self-hosted, windows]   # ou [self-hosted, windows] se seu runner for Windows
+    runs-on: [self-hosted, windows]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Show runner info
+        shell: powershell
         run: |
           whoami
-          uname -a || ver
-          docker --version
+          Write-Output "OS Info:"
+          Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, OSArchitecture
+          
+          # Verifica Docker
+          try {
+              docker --version
+          } catch {
+              Write-Output "Docker not installed"
+              exit 1
+          }
 
       - name: Build images and start containers
+        shell: powershell
         run: |
-          # usa o plugin docker compose (nova forma)
+          Write-Output "Building and starting containers..."
           docker compose -f docker-compose.dev.yml up -d --build --remove-orphans
 
       - name: Show containers
-        run: docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
+        shell: powershell
+        run: |
+          docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Status}}\t{{.Ports}}"
