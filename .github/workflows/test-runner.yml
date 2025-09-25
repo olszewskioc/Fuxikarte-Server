@@ -1,0 +1,17 @@
+name: Test self-hosted runner
+on:
+  workflow_dispatch: {}  # você pode acionar manualmente na aba Actions → Run workflow
+
+jobs:
+  prove-it:
+    runs-on: [self-hosted, linux]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Runner is alive
+        run: |
+          echo "Hello from self-hosted runner!"
+          date
+          whoami
+          docker --version || echo "docker not installed"
