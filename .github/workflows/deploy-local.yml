@@ -29,7 +29,7 @@ jobs:
         shell: powershell
         run: |
           Write-Output "Building and starting containers..."
-          docker compose -f "$Env:GITHUB_WORKSPACE\..\docker-compose.dev.yml" up -d --build --remove-orphans
+          docker compose -f "$Env:GITHUB_WORKSPACE\docker-compose.dev.yml" up -d --build --remove-orphans
 
       - name: Show containers
         shell: powershell
