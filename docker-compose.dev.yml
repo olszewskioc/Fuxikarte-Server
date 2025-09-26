@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: Fuxikarte
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: olszewski   # senha igual à sua appsettings.json
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Fuxikarte.Backend/Dockerfile
+    depends_on:
+      - db
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      # sobrescreve a connection string do appsettings.json
+      ConnectionStrings__PostgresConnection: "Host=db;Port=5432;Database=Fuxikarte;Username=postgres;Password=olszewski"
+      Jwt__Key: "sua-chave-super-secreta-no-container"
+      Jwt__Issuer: "FuxikarteAPI"
+      Jwt__Audience: "FuxikarteClient"
+    ports:
+      - "5000:80"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:80/health || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  db-data:
