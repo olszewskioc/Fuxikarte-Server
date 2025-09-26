@@ -29,6 +29,8 @@ Abaixo está a estrutura do banco de dados utilizado no projeto:
 
 * XUnit (Testes Unitários)
 
+* CI/CD (Github Actions)
+
 ## Como Executar
 
 Em breve...
